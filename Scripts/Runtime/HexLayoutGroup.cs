@@ -80,6 +80,22 @@ namespace MPewsey.HexagonalUI
             set => SetProperty(ref _constraintCount, Mathf.Max(value, 1));
         }
 
+        [SerializeField]
+        private bool _leftToRight = true;
+
+        public bool LeftToRight {
+            get => _leftToRight;
+            set => SetProperty(ref _leftToRight, value);
+        }
+
+        [SerializeField]
+        private bool _topToBottom = true;
+
+        public bool TopToBottom {
+            get => _topToBottom;
+            set => SetProperty(ref _topToBottom, value);
+        }
+        
 #if UNITY_EDITOR
         protected override void OnValidate()
         {
@@ -211,11 +227,33 @@ namespace MPewsey.HexagonalUI
 
                 if (CellOrientation == Axis.Horizontal)
                 {
-                    x = x0 + column * (0.75f * cellSize.x + Spacing.x);
-                    y = y0 + row * (cellSize.y + Spacing.y);
+                    if( LeftToRight ) {
+                        x = x0 + column * (0.75f * cellSize.x + Spacing.x);
+                        if( TopToBottom ) {
+                            y = y0 + row * (cellSize.y + Spacing.y);
+                        }
+                        else {
+                            var r = RowCount() - row - 1;
+                            y = y0 + r * (cellSize.y + Spacing.y);
+                        }
 
-                    if (IsEven(column))
-                        y += 0.5f * (cellSize.y + Spacing.y);
+                        if (IsEven(column))
+                            y += 0.5f * (cellSize.y + Spacing.y);
+                    }
+                    else {
+                        var c = ColumnCount() - column - 1;
+                        x = x0 + c * (0.75f * cellSize.x + Spacing.x);
+                        if( TopToBottom ) {
+                            y = y0 + row * (cellSize.y + Spacing.y);
+                        }
+                        else {
+                            var r = RowCount() - row - 1;
+                            y = y0 + r * (cellSize.y + Spacing.y);
+                        }
+
+                        if (IsEven(c))
+                            y += 0.5f * (cellSize.y + Spacing.y);
+                    }
                 }
                 else
                 {
