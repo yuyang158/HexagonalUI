@@ -257,8 +257,21 @@ namespace MPewsey.HexagonalUI
                 }
                 else
                 {
-                    x = x0 + column * (cellSize.x + Spacing.x);
-                    y = y0 + row * (0.75f * cellSize.y + Spacing.y);
+                    if( LeftToRight ) {
+                        x = x0 + column * ( cellSize.x + Spacing.x );
+                    }
+                    else {
+                        var c = ColumnCount() - column - 1;
+                        x = x0 + c * ( cellSize.x + Spacing.x );
+                    }
+
+                    if( TopToBottom ) {
+                        y = y0 + row * ( 0.75f * cellSize.y + Spacing.y );
+                    }
+                    else {
+                        var r = RowCount() - row - 1;
+                        y = y0 + r * ( 0.75f * cellSize.y + Spacing.y );
+                    }
 
                     if (IsEven(row))
                         x += 0.5f * (cellSize.x + Spacing.x);
